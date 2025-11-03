@@ -185,7 +185,7 @@ class Queen:
 					piece.protected_by.append(self)
 					self.protects.append(piece)
 				break
-		for j in range(position[1] - 1, -1):
+		for j in range(position[1] - 1, -1, -1):
 			i = position[0] + (position[1] - j)
 			if i > 7:
 				break
@@ -205,7 +205,7 @@ class Queen:
 					piece.protected_by.append(self)
 					self.protects.append(piece)
 				break
-		for j in range(position[1] - 1, -1):
+		for j in range(position[1] - 1, -1, -1):
 			i = position[0] - (position[1] - j)
 			if i < 0:
 				break
@@ -215,7 +215,7 @@ class Queen:
 					piece.protected_by.append(self)
 					self.protects.append(piece)
 				break
-		for i in range(position[0] - 1, -1):
+		for i in range(position[0] - 1, -1, -1):
 			j = position[1]
 			if board[i][j]:
 				if board[i][j].player == self.player:
@@ -239,7 +239,7 @@ class Queen:
 					piece.protected_by.append(self)
 					self.protects.append(piece)
 				break
-		for j in range(position[1] - 1, -1):
+		for j in range(position[1] - 1, -1, -1):
 			i = position[0]
 			if board[i][j]:
 				if board[i][j].player == self.player:
@@ -336,7 +336,7 @@ class Bishop:
 					piece.protected_by.append(self)
 					self.protects.append(piece)
 				break
-		for j in range(position[1] - 1, -1):
+		for j in range(position[1] - 1, -1, -1):
 			i = position[0] + (position[1] - j)
 			if i > 7:
 				break
@@ -356,7 +356,7 @@ class Bishop:
 					piece.protected_by.append(self)
 					self.protects.append(piece)
 				break
-		for j in range(position[1] - 1, -1):
+		for j in range(position[1] - 1, -1, -1):
 			i = position[0] - (position[1] - j)
 			if i < 0:
 				break
@@ -511,7 +511,7 @@ class Rook:
 	def protect(self):
 		position = self.position
 		board = self.board
-		for i in range(position[0] - 1, -1):
+		for i in range(position[0] - 1, -1, -1):
 			j = position[1]
 			if board[i][j]:
 				if board[i][j].player == self.player:
@@ -535,7 +535,7 @@ class Rook:
 					piece.protected_by.append(self)
 					self.protects.append(piece)
 				break
-		for j in range(position[1] - 1, -1):
+		for j in range(position[1] - 1, -1, -1):
 			i = position[0]
 			if board[i][j]:
 				if board[i][j].player == self.player:
@@ -568,7 +568,7 @@ class Pawn:
 		moves = set()
 		if self.player:
 			moves.add((self.position[0] - 1, self.position[1]))
-			if self.has_not_moved:
+			if self.has_not_moved and not self.board[self.position[0] - 1][self.position[1]]:
 				moves.add((self.position[0] - 2, self.position[1]))
 
 			new_moves = set()
@@ -578,7 +578,7 @@ class Pawn:
 			moves = new_moves
 			new_moves = set()
 			for move in moves:
-				if not (board[move[0]][move[1]] and board[move[0]][move[1]].player == self.player):
+				if not board[move[0]][move[1]]:
 					new_moves.add(move)
 			moves = new_moves
 
@@ -590,7 +590,7 @@ class Pawn:
 				moves.add((self.position[0] - 1, self.position[1] + 1))
 		else:
 			moves.add((self.position[0] + 1, self.position[1]))
-			if self.has_not_moved:
+			if self.has_not_moved and not self.board[self.position[0] + 1][self.position[1]]:
 				moves.add((self.position[0] + 2, self.position[1]))
 
 			new_moves = set()
@@ -600,7 +600,7 @@ class Pawn:
 			moves = new_moves
 			new_moves = set()
 			for move in moves:
-				if not (board[move[0]][move[1]] and board[move[0]][move[1]].player == self.player):
+				if not board[move[0]][move[1]]:
 					new_moves.add(move)
 			moves = new_moves
 
@@ -647,18 +647,18 @@ class Pawn:
 				piece.protected_by.append(self)
 				self.protects.append(piece)
 			if self.position[0] > 0 and self.position[1] < 7 and self.board[self.position[0] - 1][self.position[1] + 1] and \
-				self.board[self.position[0] - 1][self.position[1] + 1].player != self.player:
+				self.board[self.position[0] - 1][self.position[1] + 1].player == self.player:
 				piece = self.board[self.position[0] - 1][self.position[1] + 1]
 				piece.protected_by.append(self)
 				self.protects.append(piece)
 		else:
 			if self.position[0] < 7 and self.position[1] > 0 and self.board[self.position[0] + 1][self.position[1] - 1] and \
-				self.board[self.position[0] + 1][self.position[1] - 1].player != self.player:
+				self.board[self.position[0] + 1][self.position[1] - 1].player == self.player:
 				piece = self.board[self.position[0] + 1][self.position[1] - 1]
 				piece.protected_by.append(self)
 				self.protects.append(piece)
 			if self.position[0] < 7 and self.position[1] < 7 and self.board[self.position[0] + 1][self.position[1] + 1] and \
-				self.board[self.position[0] + 1][self.position[1] + 1].player != self.player:
+				self.board[self.position[0] + 1][self.position[1] + 1].player == self.player:
 				piece = self.board[self.position[0] + 1][self.position[1] + 1]
 				piece.protected_by.append(self)
 				self.protects.append(piece)
@@ -788,7 +788,7 @@ board = protect_pieces(board)
 
 def find_piece(piece_string, board):
 	for i in range(len(board)):
-		for j in range(len(board)):
+		for j in range(len(board[i])):
 			if board[i][j] and board[i][j].to_string() == piece_string:
 				return board[i][j]
 	return None
@@ -845,10 +845,14 @@ while not (is_white_turn and find_piece("kw", board).position in player_threaten
 		if not piece.validate_move(end):
 			continue
 		piece.move(end)
+		if (is_white_turn and find_piece("kw", board).position in player_threatens(False, board)) or \
+			(not is_white_turn and find_piece("kb", board).position in player_threatens(True, board)):
+			piece.move(start)
+			continue
 	else:
 		if not piece.validate_move(end):
 			continue
-		if end in player_threatens(is_white_turn, board):
+		if end in player_threatens(not is_white_turn, board):
 			continue
 		piece.move(end)
 
